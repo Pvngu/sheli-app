@@ -1,22 +1,19 @@
-import { notification } from "ant-design-vue";
 import { createRouter, createWebHistory } from 'vue-router';
-import axios from "axios";
-import { find, includes, remove, replace } from "lodash-es";
+import { includes, replace } from "lodash-es";
 import store from '../store';
 
 import AuthRoutes from './auth';
 import DashboardRoutes from './dashboard';
 import UserRoutes from './users';
+import AccidentRoutes from './accidents';
+import AreaRoutes from './areas';
 import SettingRoutes from './settings';
 import SetupAppRoutes from './setupApp';
 import { checkUserPermission } from '../../common/scripts/functions';
 
-const appType = window.config.app_type;
 const allActiveModules = window.config.modules;
 
 const isAdminCompanySetupCorrect = () => {
-    var appSetting = store.state.auth.appSetting;
-
     return true;
 }
 
@@ -31,6 +28,8 @@ const router = createRouter({
         ...DashboardRoutes,
         ...UserRoutes,
         ...SettingRoutes,
+        ...AccidentRoutes,
+        ...AreaRoutes,
     ],
     scrollBehavior: () => ({ left: 0, top: 0 }),
 });
