@@ -61,5 +61,7 @@ ApiRoute::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         ApiRoute::post('app-notifications/{id}/mark-as-read', ['as' => 'api.app-notifications.mark-as-read', 'uses' => 'AppNotificationUserController@markAsRead']);
         ApiRoute::post('app-notifications/mark-all-as-read', ['as' => 'api.app-notifications.mark-all-as-read', 'uses' => 'AppNotificationUserController@markAllAsRead']);
 
+        ApiRoute::resource('accidents', 'AccidentController', $options);
+        ApiRoute::resource('areas', 'AreaController', $options);
     });
 });
