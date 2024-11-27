@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('company_id')->unsigned()->nullable()->default(null);
             $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
             $table->bigInteger('role_id')->unsigned()->nullable()->default(null);
+            $table->bigInteger('area_id')->unsigned()->nullable()->default(null);
             $table->boolean('is_superadmin')->default(false);
             $table->string('user_type')->default('staff_members');
             $table->boolean('login_enabled')->default(true);
