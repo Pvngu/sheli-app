@@ -21,7 +21,7 @@
             <a-row :gutter="16">
                 <a-col :span="24">
                     <a-form-item
-                        :label="$t('campaign.export_as')"
+                        :label="$t('common.export_as')"
                         name="export_type"
                         :help="
                             rules.export_type
