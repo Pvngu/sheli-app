@@ -51,6 +51,42 @@ class PermsSeed
             'display_name' => 'Company Edit'
         ],
 
+        // Accident
+        'accidents_view' => [
+            'name' => 'accidents_view',
+            'display_name' => 'Accident View'
+        ],
+        'accidents_create' => [
+            'name' => 'accidents_create',
+            'display_name' => 'Accident Create'
+        ],
+        'accidents_edit' => [
+            'name' => 'accidents_edit',
+            'display_name' => 'Accident Edit'
+        ],
+        'accidents_delete' => [
+            'name' => 'accidents_delete',
+            'display_name' => 'Accident Delete'
+        ],
+
+        // Area
+        'areas_view' => [
+            'name' => 'areas_view',
+            'display_name' => 'Area View'
+        ],
+        'areas_create' => [
+            'name' => 'areas_create',
+            'display_name' => 'Area Create'
+        ],
+        'areas_edit' => [
+            'name' => 'areas_edit',
+            'display_name' => 'Area Edit'
+        ],
+        'areas_delete' => [
+            'name' => 'areas_delete',
+            'display_name' => 'Area Delete'
+        ],
+
         // Translation
         'translations_view' => [
             'name' => 'translations_view',
@@ -69,21 +105,21 @@ class PermsSeed
             'display_name' => 'Translation Delete'
         ],
 
-        // Storage Settings
-        'storage_edit' => [
-            'name' => 'storage_edit',
-            'display_name' => 'Storage Settings Edit'
-        ],
+        // // Storage Settings
+        // 'storage_edit' => [
+        //     'name' => 'storage_edit',
+        //     'display_name' => 'Storage Settings Edit'
+        // ],
 
-        // activity_log Settings
-        'activity_log_view' => [
-            'name' => 'activity_log_view',
-            'display_name' => 'Activity Log View'
-        ],
-        'activity_log_view_all' => [
-            'name' => 'activity_log_view_all',
-            'display_name' => 'View All Campaigns'
-        ],
+        // // activity_log Settings
+        // 'activity_log_view' => [
+        //     'name' => 'activity_log_view',
+        //     'display_name' => 'Activity Log View'
+        // ],
+        // 'activity_log_view_all' => [
+        //     'name' => 'activity_log_view_all',
+        //     'display_name' => 'View All Campaigns'
+        // ],
 
         // Team Chat Settings
         'team_chat_view' => [
