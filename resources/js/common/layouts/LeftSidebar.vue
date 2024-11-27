@@ -119,18 +119,6 @@
                         <span>{{ $t("menu.chat") }}</span>
                     </a-menu-item>
 
-                    <LeftSideBarMainHeading
-                        v-if="
-                            permsArray.includes('users_view') ||
-                            permsArray.includes('admin') ||
-                            ((permsArray.includes('salesmans_view') ||
-                                permsArray.includes('admin')) &&
-                                willSubscriptionModuleVisible('salesman'))
-                        "
-                        :title="$t('menu.user_management')"
-                        :visible="menuCollapsed"
-                    />
-
                     <a-menu-item
                         v-if="
                             permsArray.includes('users_view') ||
@@ -148,11 +136,34 @@
                         <span>{{ $t("menu.staff_members") }}</span>
                     </a-menu-item>
 
-                    <LeftSideBarMainHeading
-                        :title="$t('menu.lead_sale_management')"
-                        :visible="menuCollapsed"
-                    />
 
+                    <a-menu-item
+                        v-if="permsArray.includes('accidents_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.accidents.index' });
+                            }
+                        "
+                        key="accidents"
+                    >
+                        <CarOutlined />
+                        <span>{{ $t("menu.accidents") }}</span>
+                    </a-menu-item>
+
+                    <a-menu-item
+                        v-if="permsArray.includes('areas_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.areas.index' });
+                            }
+                        "
+                        key="areas"
+                    >
+                        <ApartmentOutlined />
+                        <span>{{ $t("menu.areas") }}</span>
+                    </a-menu-item>
                     <LeftSideBarMainHeading
                         :title="$t('menu.settings')"
                         :visible="menuCollapsed"
