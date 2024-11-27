@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Classes\Common;
 use App\Traits\UserTraits;
 use App\Exports\UsersExport;
-use App\Models\IndividualLog;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ApiBaseController;
 use App\Http\Requests\Api\User\IndexRequest;
@@ -77,8 +76,6 @@ class UsersController extends ApiBaseController
         if(!$user->ability('admin', 'reports_view')) {
             throw new ApiException("Not Allowed");
         }
-
-        Common::storeIndividualLog(null, 'staff_members_export');
 
         return Excel::download(new UsersExport($columns, $startDate, $endDate, $selectedRowKeys, $roleIds), "staff_members.$format");
     }
