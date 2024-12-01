@@ -7,7 +7,6 @@ use App\Http\Requests\Api\Area\IndexRequest;
 use App\Http\Requests\Api\Area\StoreRequest;
 use App\Http\Requests\Api\Area\DeleteRequest;
 use App\Http\Requests\Api\Area\UpdateRequest;
-
 use App\Models\Area;
 
 class AreaController extends ApiBaseController
