@@ -24,7 +24,7 @@ return new class extends Migration
 
             $table->foreign('injured_person')->references('id')->on('users');
             $table->foreign('reporting_user')->references('id')->on('users');
-            $table->foreign('area_id')->references('id')->on('areas');
+            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
         });
     }
 
