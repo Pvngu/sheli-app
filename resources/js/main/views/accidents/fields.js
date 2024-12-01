@@ -58,6 +58,7 @@ const fields = () => {
         {
             title: t('accident.description'),
             dataIndex: 'description',
+            width: '40%',
         },
         {
             title: t('accident.status'),

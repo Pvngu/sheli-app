@@ -19,9 +19,7 @@
                 >
                 <DateTimePicker
                     :dateTime="formData.date_of_accident"
-                    :isFutureDateDisabled="true"
                     :showTime="true"
-                    :onlyDate="false"
                     @dateTimeChanged="
                         (changedDateTime) =>
                             (formData.date_of_accident = changedDateTime)

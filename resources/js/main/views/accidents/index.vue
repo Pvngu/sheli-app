@@ -49,7 +49,12 @@
             </a-col>
             <a-col :xs="24" :sm="24" :md="12" :lg="14" :xl="14">
                 <a-row :gutter="[16, 16]" justify="end">
-                    <a-col :xs="24" :sm="24" :md="12" :lg="12" :xl="8">
+                    <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="2">
+                        <ExportButton
+                            :dates="extraFilters.dates"
+                        />
+                    </a-col>
+                    <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="6">
                         <a-select
                             v-model:value="filters.area_id"
                             :placeholder="
@@ -145,6 +150,41 @@
                             <template v-if="column.dataIndex === 'area'">
                                 {{ record.area.name }}
                             </template>
+                            <template v-if="column.dataIndex === 'description'">
+                                <p style="text-align: justify; white-space: wrap;" >
+                                    <a-typography-paragraph
+                                        :ellipsis="{
+                                            rows: 2,
+                                            expandable: true,
+                                            symbol: $t('common.more'),
+                                        }"
+                                        :content="record.description"
+                                    />
+                                </p>
+                            </template>
+                            <template v-if="column.dataIndex === 'status'">
+                                <a-tag
+                                    :color="
+                                        record.status === 'resolved'
+                                            ? 'green'
+                                            : record.status === 'in_progress'
+                                            ? 'blue'
+                                            : record.status === 'reported'
+                                            ? 'orange'
+                                            : ''
+                                    "
+                                >
+                                    {{
+                                        record.status === 'resolved'
+                                            ? $t('accident.resolved')
+                                            : record.status === 'in_progress'
+                                            ? $t('accident.in_progress')
+                                            : record.status === 'reported'
+                                            ? $t('accident.reported')
+                                            : ''
+                                    }}
+                                </a-tag>
+                            </template>
                             <template v-if="column.dataIndex === 'action'">
                                 <a-button
                                     v-if="
@@ -188,6 +228,7 @@ import fields from "./fields";
 import AddEdit from "./AddEdit.vue";
 import UserSelect from "../../../common/components/common/select/UserSelect.vue";
 import DateRangePicker from "../../../common/components/common/calendar/DateRangePicker.vue";
+import ExportButton from "./ExportButton.vue";
 
 export default {
     components: {
@@ -198,6 +239,7 @@ export default {
         AdminPageHeader,
         UserSelect,
         DateRangePicker,
+        ExportButton,
     },
     setup() {
         const { permsArray, appSetting, formatDateTime } = common();
