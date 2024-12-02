@@ -105,22 +105,6 @@ class PermsSeed
             'display_name' => 'Translation Delete'
         ],
 
-        // // Storage Settings
-        // 'storage_edit' => [
-        //     'name' => 'storage_edit',
-        //     'display_name' => 'Storage Settings Edit'
-        // ],
-
-        // // activity_log Settings
-        // 'activity_log_view' => [
-        //     'name' => 'activity_log_view',
-        //     'display_name' => 'Activity Log View'
-        // ],
-        // 'activity_log_view_all' => [
-        //     'name' => 'activity_log_view_all',
-        //     'display_name' => 'View All Campaigns'
-        // ],
-
         // Team Chat Settings
         'team_chat_view' => [
             'name' => 'team_chat_view',
@@ -135,6 +119,56 @@ class PermsSeed
         'reports_view' => [
             'name' => 'reports_view',
             'display_name' => 'Reports View'
+        ],
+
+        // Document Settings
+        'documents_view' => [
+            'name' => 'documents_view',
+            'display_name' => 'Documents View'
+        ],
+        'documents_create' => [
+            'name' => 'documents_create',
+            'display_name' => 'Documents Create'
+        ],
+        'documents_delete' => [
+            'name' => 'documents_delete',
+            'display_name' => 'Documents Delete'
+        ],
+
+        // Audits Settings
+        'audits_view' => [
+            'name' => 'audits_view',
+            'display_name' => 'Audits View'
+        ],
+        'audits_create' => [
+            'name' => 'audits_create',
+            'display_name' => 'Audits Create'
+        ],
+        'audits_edit' => [
+            'name' => 'audits_edit',
+            'display_name' => 'Audits Edit'
+        ],
+        'audits_delete' => [
+            'name' => 'audits_delete',
+            'display_name' => 'Audits Delete'
+        ],
+
+        // Enrollments Settings
+        'enrollments_view' => [
+            'name' => 'enrollments_view',
+            'display_name' => 'Enrollments View'
+        ],
+        'enrollments_create' => [
+            'name' => 'enrollments_create',
+            'display_name' => 'Enrollments Create'
+        ],
+        'enrollments_edit' => [
+            'name' => 'enrollments_edit',
+            'display_name' => 'Enrollments Edit'
+        ],
+        'enrollments_delete' => [
+            'name' => 'enrollments_delete',
+            'display_name' => 'Enrollments Delete'
         ],
     ];
 
