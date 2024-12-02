@@ -1,21 +1,23 @@
 <template>
-    <DoughnutChart ref="chartRef" :chartData="testData" :options="options" />
+    <LineChart ref="chartRef" :chartData="testData" :options="options" />
 </template>
 
 <script>
 import { ref, watch } from "vue";
-import { DoughnutChart } from "vue-chart-3";
+import { LineChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
+import { useI18n } from "vue-i18n";
 
 Chart.register(...registerables);
 
 export default {
     props: ["data"],
     components: {
-        DoughnutChart,
+        LineChart,
     },
     setup(props) {
         const chartRef = ref();
+        const { t } = useI18n();
 
         const options = ref({
             responsive: true,
@@ -34,17 +36,14 @@ export default {
 
         watch(props, (newVal, oldVal) => {
             testData.value = {
-                labels: newVal.data.accidents_by_area
-                    ? newVal.data.accidents_by_area.labels
-                    : [],
+                labels: newVal.data.accident_trends.labels ? newVal.data.accident_trends.labels : [],
                 datasets: [
                     {
-                        data: newVal.data.accidents_by_area
-                            ? newVal.data.accidents_by_area.values
+                        label: t("menu.accidents"),
+                        data: newVal.data.accident_trends.values
+                            ? newVal.data.accident_trends.values
                             : [],
-                        backgroundColor: newVal.data.accidents_by_area
-                            ? newVal.data.accidents_by_area.colors
-                            : [],
+                        backgroundColor: "#20C997",
                     },
                 ],
             };
