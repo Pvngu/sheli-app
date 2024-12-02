@@ -30,4 +30,9 @@ class Area extends BaseModel
     {
         return $this->hasMany(User::class, 'area_id', 'id');
     }
+
+    public function accidents()
+    {
+        return $this->hasMany(Accident::class, 'area_id', 'id');
+    }
 }
