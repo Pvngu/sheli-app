@@ -19,66 +19,78 @@
 
         <div class="mt-30 mb-20">
             <a-row :gutter="[15, 15]">
-                <a-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
+                <a-col :xs="24" :sm="24" :md="16" :lg="6" :xl="6">
+                    <StateWidget bgColor="#d46b08">
+                        <template #image>
+                            <Icon style="color: #fff; font-size: 24px">
+                                <template #component>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 448 512"><path d="M277.4 12C261.1 4.5 243.1 0 224 0c-53.7 0-99.5 33.1-118.5 80h81.2l90.7-68zM342.5 80c-7.9-19.5-20.7-36.2-36.5-49.5L240 80h102.5zM224 256c70.7 0 128-57.3 128-128 0-5.5-1-10.7-1.6-16H97.6c-.7 5.3-1.6 10.5-1.6 16 0 70.7 57.3 128 128 128zM80 299.7V512h128.3l-98.5-221.5A132.8 132.8 0 0 0 80 299.7zM0 464c0 26.5 21.5 48 48 48V320.2C18.9 344.9 0 381.3 0 422.4V464zm256-48h-55.4l42.7 96H256c26.5 0 48-21.5 48-48s-21.5-48-48-48zm57.6-128h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.7-5.8-72.9-16h-7.4l42.7 96H256c44.1 0 80 35.9 80 80 0 18.1-6.3 34.6-16.4 48H400c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" fill="#fff"/></svg>
+                                </template>
+                            </Icon>
+                        </template>
+                        <template #description>
+                            <h2 v-if="responseData.stateData">
+                                {{ responseData.stateData.accident_count }}
+                            </h2>
+                            <p>{{ $t("dashboard.total_accidents") }}</p>
+                        </template>
+                    </StateWidget>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="16" :lg="6" :xl="6">
                     <StateWidget bgColor="#08979c">
                         <template #image>
-                            <CopyrightCircleOutlined
+                            <Icon style="color: #fff; font-size: 24px">
+                                <template #component>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 448 512"><path d="M277.4 12C261.1 4.5 243.1 0 224 0c-53.7 0-99.5 33.1-118.5 80h81.2l90.7-68zM342.5 80c-7.9-19.5-20.7-36.2-36.5-49.5L240 80h102.5zM224 256c70.7 0 128-57.3 128-128 0-5.5-1-10.7-1.6-16H97.6c-.7 5.3-1.6 10.5-1.6 16 0 70.7 57.3 128 128 128zM80 299.7V512h128.3l-98.5-221.5A132.8 132.8 0 0 0 80 299.7zM0 464c0 26.5 21.5 48 48 48V320.2C18.9 344.9 0 381.3 0 422.4V464zm256-48h-55.4l42.7 96H256c26.5 0 48-21.5 48-48s-21.5-48-48-48zm57.6-128h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.7-5.8-72.9-16h-7.4l42.7 96H256c44.1 0 80 35.9 80 80 0 18.1-6.3 34.6-16.4 48H400c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z" fill="#fff"/></svg>
+                                </template>
+                            </Icon>
+                        </template>
+                        <template #description>
+                            <h2 v-if="responseData.stateData">
+                                {{ responseData.stateData.current_injured_members_count }}
+                            </h2>
+                            <p>{{ $t("dashboard.current_injured_members") }}</p>
+                        </template>
+                    </StateWidget>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="16" :lg="6" :xl="6">
+                    <StateWidget bgColor="#389e0d">
+                        <template #image>
+                            <Icon>
+                                <template #component>
+                                    <Icon style="color: #fff; font-size: 24px">
+                                <template #component>
+                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fff" version="1.1" id="Layer_1" width="1em" height="1em" viewBox="0 0 256 256" enable-background="new 0 0 256 256" xml:space="preserve">
+                                        <path d="M215.284,237.206c-0.611,8.092-7.634,14.046-15.725,13.435c-2.595-0.153-4.428-1.069-6.718-2.137  c0,0-41.527-28.244-43.97-30.229c-4.122-3.511-8.244-7.634-10.076-13.588c-0.611-2.137-9.008-30.687-9.008-30.687L126.017,254  H41.746l2.036-32.214H23.832C11.771,221.786,2,212.015,2,199.954c0-2.901,0.458-5.649,1.527-8.092c0,0,22.596-50.687,26.871-58.932  c6.26-12.367,17.252-17.71,32.672-17.252h40.764L18.489,176.9l-7.634,17.863c-0.763,1.527-1.069,3.359-1.069,5.191  c0,7.634,6.26,13.893,13.893,13.893h70.993c12.061,0,21.832-9.771,21.832-21.832c0-10.687-7.634-19.695-17.71-21.527l20.763-55.115  h4.886c11.45,0,20.458,7.786,23.054,16.641l16.336,58.932c0.305,0.916,1.374,2.748,2.748,3.817  c1.679,1.221,43.054,29.619,43.054,29.619C213.452,227.282,215.742,232.015,215.284,237.206z M89.94,105.602  c17.863,1.374,33.435-11.908,34.809-29.771c1.374-17.863-11.908-33.435-29.771-34.809S61.542,52.93,60.168,70.792  C58.794,88.655,72.077,104.228,89.94,105.602z M108.566,191.862c0-7.176-5.496-12.977-12.367-13.741l-10.076,27.787l8.55-0.153  C102.306,205.755,108.566,199.496,108.566,191.862z M203.25,2c-27.994,0-50.75,22.715-50.75,50.668  c0,27.994,22.756,50.75,50.75,50.75S254,80.663,254,52.668C253.918,24.715,231.163,2,203.25,2z M203.25,93.391  c-22.469,0-40.723-18.254-40.723-40.723s18.254-40.723,40.723-40.723s40.723,18.254,40.723,40.723  C243.727,75.137,225.474,93.391,203.25,93.391z M228.543,42.764c-0.941-1.555-2.906-2.619-5.157-1.473l-17.967,8.022V28.071  c0-1.146-0.409-2.169-1.146-2.947l-0.041-0.041c-0.737-0.655-1.596-0.941-2.619-0.941c-1.965,0-4.011,1.473-4.011,3.929v27.79  c0,1.514,0.859,2.947,2.21,3.683c0.696,0.327,1.31,0.491,1.883,0.491c0.614,0,1.31-0.205,1.965-0.491l23.206-11.091  c1.023-0.532,1.76-1.392,2.087-2.415C229.198,44.974,229.075,43.787,228.543,42.764L228.543,42.764z"/>
+</svg>
+                                </template>
+                            </Icon>
+                                </template>
+                            </Icon>
+                        </template>
+                        <template #description>
+                            <h2 v-if="responseData.stateData">
+                                {{ responseData.stateData.lost_time_injuries }}
+                            </h2>
+                            <p>{{ $t("dashboard.lost_time_injuries") }}</p>
+                        </template>
+                    </StateWidget>
+                </a-col>
+                
+                <a-col :xs="24" :sm="24" :md="16" :lg="6" :xl="6">
+                    <StateWidget bgColor="#ffa39e">
+                        <template #image>
+                            <FieldTimeOutlined
                                 style="color: #fff; font-size: 24px"
                             />
                         </template>
                         <template #description>
                             <h2 v-if="responseData.stateData">
-                                {{ responseData.stateData.campaign_count }}
+                                {{ responseData.stateData.days_since_last_accident }}
                             </h2>
-                            <p>{{ $t("dashboard.active_campaigns") }}</p>
-                        </template>
-                    </StateWidget>
-                </a-col>
-
-                <a-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                    <StateWidget bgColor="#389e0d">
-                        <template #image>
-                            <ScheduleOutlined style="color: #fff; font-size: 24px" />
-                        </template>
-                        <template #description>
-                            <h2 v-if="responseData.stateData">
-                                {{ responseData.stateData.total_follow_ups }}
-                            </h2>
-                            <p>{{ $t("dashboard.total_follow_up") }}</p>
-                        </template>
-                    </StateWidget>
-                </a-col>
-
-                <a-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                    <StateWidget bgColor="#d46b08">
-                        <template #image>
-                            <MobileOutlined style="color: #fff; font-size: 24px" />
-                        </template>
-                        <template #description>
-                            <h2 v-if="responseData.stateData">
-                                {{ responseData.stateData.lead_count }}
-                            </h2>
-                            <p>{{ $t("dashboard.call_made") }}</p>
-                        </template>
-                    </StateWidget>
-                </a-col>
-
-                <a-col :xs="24" :sm="24" :md="6" :lg="6" :xl="6">
-                    <StateWidget bgColor="#ffa39e">
-                        <template #image>
-                            <ClockCircleOutlined style="color: #fff; font-size: 24px" />
-                        </template>
-                        <template #description>
-                            <h2 v-if="responseData.stateData">
-                                <small>
-                                    {{
-                                        formatTimeDuration(
-                                            responseData.stateData.total_times
-                                        )
-                                    }}
-                                </small>
-                            </h2>
-                            <p>{{ $t("dashboard.total_duration") }}</p>
+                            <p>{{ $t("dashboard.days_since_last_accident") }}</p>
                         </template>
                     </StateWidget>
                 </a-col>
@@ -87,69 +99,100 @@
 
         <a-row :gutter="[18, 18]" class="mt-30 mb-20">
             <a-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
-                <a-card :title="$t('dashboard.active_actioned_campaigns')">
+                <a-card :title="$t('dashboard.accidents_by_area')">
                     <ActionedCampaigns :data="responseData" />
                 </a-card>
             </a-col>
             <a-col :xs="24" :sm="24" :md="12" :lg="18" :xl="18">
-                <a-card :title="$t('dashboard.call_made')">
-                    <CallMade :data="responseData" />
-                    <template #extra>
-                        <a-button
-                            class="mt-10"
-                            type="link"
-                            @click="
-                                $router.push({
-                                    name: 'admin.leads.index',
-                                })
-                            "
-                        >
-                            {{ $t("common.view_all") }}
-                            <DoubleRightOutlined />
-                        </a-button>
-                    </template>
+                <a-card :title="$t('dashboard.accidents_trend')">
+                    <AccidentsTrend :data="responseData" />
                 </a-card>
             </a-col>
         </a-row>
 
         <a-row :gutter="[18, 18]" class="mt-30 mb-20">
-            <a-col :xs="24" :sm="24" :md="12" :lg="16" :xl="16">
+            <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
                 <a-card
-                    :title="$t('salesman_booking.salesman_booking')"
+                    :title="$t('dashboard.recent_accidents')"
                     :bodyStyle="{ padding: '0px' }"
-                    v-if="responseData && responseData.allAppointments"
+                    v-if="responseData && responseData.recent_accidents"
                 >
-                    <SalesmanBooking :responseData="responseData" />
+                    <a-table
+                        :columns="accidentsColumns"
+                        :dataSource="responseData.recent_accidents"
+                        :pagination="false"
+                        :scroll="{ y: 300 }"
+                    >
+                        <template #bodyCell="{ column, record }">
+                            <template v-if="column.dataIndex === 'date_of_accident'">
+                                {{ formatDateTime(record.date_of_accident) }}
+                            </template>
+                            <template v-if="column.dataIndex === 'injured_person'">
+                                {{ record.injured_person.name }}
+                            </template>
+                            <template v-if="column.dataIndex === 'reporting_user'">
+                                {{ record.reporting_user.name }}
+                            </template>
+                            <template v-if="column.dataIndex === 'area'">
+                                {{ record.area.name }}
+                            </template>
+                            <template v-if="column.dataIndex === 'status'">
+                                <a-tag
+                                    :color="
+                                        record.status === 'resolved'
+                                            ? 'green'
+                                            : record.status === 'in_progress'
+                                            ? 'blue'
+                                            : record.status === 'reported'
+                                            ? 'orange'
+                                            : ''
+                                    "
+                                >
+                                    {{
+                                        record.status === 'resolved'
+                                            ? $t('accident.resolved')
+                                            : record.status === 'in_progress'
+                                            ? $t('accident.in_progress')
+                                            : record.status === 'reported'
+                                            ? $t('accident.reported')
+                                            : ''
+                                    }}
+                                </a-tag>
+                            </template>
+                            <!-- <template v-if="column.dataIndex === 'action'">
+                                <a-button
+                                    v-if="
+                                        permsArray.includes('accidents_edit') ||
+                                        permsArray.includes('admin')
+                                    "
+                                    type="primary"
+                                    @click="editItem(record)"
+                                    style="margin-left: 4px"
+                                >
+                                    <template #icon><EditOutlined /></template>
+                                </a-button>
+                                <a-button
+                                    v-if="
+                                        (permsArray.includes('accidents_delete') ||
+                                            permsArray.includes('admin')) &&
+                                        (!record.children || record.children.length == 0)
+                                    "
+                                    type="primary"
+                                    @click="showDeleteConfirm(record.xid)"
+                                    style="margin-left: 4px"
+                                >
+                                    <template #icon><DeleteOutlined /></template>
+                                </a-button>
+                            </template> -->
+                        </template>
+                    </a-table>
                     <template #extra>
                         <a-button
                             class="mt-10"
                             type="link"
                             @click="
                                 $router.push({
-                                    name: 'admin.bookings.salesman_bookings.index',
-                                })
-                            "
-                        >
-                            {{ $t("common.view_all") }}
-                            <DoubleRightOutlined />
-                        </a-button>
-                    </template>
-                </a-card>
-            </a-col>
-            <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="8">
-                <a-card
-                    :title="$t('lead_follow_up.follow_up')"
-                    :bodyStyle="{ padding: '0px' }"
-                    v-if="responseData && responseData.allFollowUps"
-                >
-                    <Followups :responseData="responseData" />
-                    <template #extra>
-                        <a-button
-                            class="mt-10"
-                            type="link"
-                            @click="
-                                $router.push({
-                                    name: 'admin.bookings.lead_follow_up.index',
+                                    name: 'admin.accidents.index',
                                 })
                             "
                         >
@@ -165,19 +208,21 @@
 
 <script>
 import { onMounted, reactive, ref, watch } from "vue";
-import {
+import Icon, {
     CopyrightCircleOutlined,
     MobileOutlined,
     ScheduleOutlined,
     ClockCircleOutlined,
     DoubleRightOutlined,
+    UserOutlined,
+    FieldTimeOutlined
 } from "@ant-design/icons-vue";
 import { useI18n } from "vue-i18n";
 import common from "../../common/composable/common";
 import AdminPageHeader from "../../common/layouts/AdminPageHeader.vue";
 import StateWidget from "../../common/components/common/card/StateWidget.vue";
 import ActionedCampaigns from "../components/charts/dashboard/ActionedCampaigns.vue";
-import CallMade from "../components/charts/dashboard/CallMade.vue";
+import AccidentsTrend from "../components/charts/dashboard/AccidentsTrend.vue";
 import SalesmanBooking from "./dashboard/SalesmanBookings.vue";
 import Followups from "./dashboard/Followups.vue";
 import DateRangePicker from "../../common/components/common/calendar/DateRangePicker.vue";
@@ -187,7 +232,7 @@ export default {
         AdminPageHeader,
         StateWidget,
         ActionedCampaigns,
-        CallMade,
+        AccidentsTrend,
         SalesmanBooking,
         Followups,
         DateRangePicker,
@@ -197,14 +242,43 @@ export default {
         ClockCircleOutlined,
         ScheduleOutlined,
         DoubleRightOutlined,
+        UserOutlined,
+        Icon,
+        FieldTimeOutlined
     },
     setup() {
-        const { formatTimeDuration } = common();
+        const { formatTimeDuration, formatDateTime } = common();
         const { t } = useI18n();
         const responseData = ref([]);
         const filters = reactive({
             dates: [],
         });
+        const accidentsColumns = [
+            {
+                title: t('accident.date_of_accident'),
+                dataIndex: 'date_of_accident',
+            },
+            {
+                title: t('accident.injured_person'),
+                dataIndex: 'injured_person',
+            },
+            {
+                title: t('accident.reporting_user'),
+                dataIndex: 'reporting_user',
+            },
+            {
+                title: t('accident.area'),
+                dataIndex: 'area',
+            },
+            {
+                title: t('accident.status'),
+                dataIndex: 'status',
+            },
+            {
+                title: t('accident.action'),
+                dataIndex: 'action',
+            },
+        ];
 
         onMounted(() => {
             getInitData();
@@ -226,6 +300,8 @@ export default {
             formatTimeDuration,
             filters,
             responseData,
+            accidentsColumns,
+            formatDateTime,
         };
     },
 };

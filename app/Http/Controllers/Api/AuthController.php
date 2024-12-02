@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
+use App\Models\Area;
 use App\Models\Form;
 use App\Models\Lang;
 use App\Models\User;
 use App\Classes\Common;
 use App\Models\Company;
-use App\Models\Salesman;
+use App\Models\Accident;
 use App\Models\Settings;
-use Carbon\CarbonPeriod;
-use App\Models\Individual;
 use App\Models\StaffMember;
-use App\Models\CampaignUser;
 use Illuminate\Http\Request;
 use Examyou\RestAPI\ApiResponse;
 use Illuminate\Support\Facades\DB;
@@ -96,10 +94,16 @@ class AuthController extends ApiBaseController
 
     public function allUsers()
     {
-        $users = User::join('roles', 'users.role_id', '=', 'roles.id')
-            ->select('users.id', 'users.name', 'users.profile_image', 'users.status', 'roles.display_name as role')
-            ->get()
-            ->groupBy('role');
+        $request = request();
+
+        $query = User::join('roles', 'users.role_id', '=', 'roles.id')
+            ->select('users.id', 'users.name', 'users.profile_image', 'users.status', 'roles.display_name as role');
+
+        if($request->has('role') && $request->role != '') {
+            $query = $query->where('roles.name', '=', $request->role);
+        }
+
+        $users = $query->get()->groupBy('role');
 
         return ApiResponse::make('Success', [
             'users' => $users
@@ -295,257 +299,113 @@ class AuthController extends ApiBaseController
 
     public function dashboard(Request $request)
     {
-        $user = user();
+        $totalAccidents = Accident::query();
 
-        $yourCampaignCount = CampaignUser::join('campaigns', 'campaigns.id', '=', 'campaign_users.campaign_id')
-            ->where('campaign_users.user_id', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            })
-            ->count();
+        $lostTimeInjuries = Accident::query()->whereNotNull('days_absent');
 
-        $yourLeadCount = Individual::join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->where('individuals.last_action_by', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            });
+        $currentInjuredPersonCount = Accident::where('status', 'in_progress')->count();
 
-        $totalTimes = Individual::join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->where('individuals.last_action_by', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            });
+        $lastAccidentDate = Accident::where('status', 'resolved')
+            ->orderBy('date_of_accident', 'desc')
+            ->pluck('date_of_accident')
+            ->first();
 
-        $totalFollowUps = Individual::join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->join('individual_logs', 'individual_logs.id', '=', 'individuals.individual_follow_up_id')
-            ->where('individual_logs.user_id', '=', $user->id)
-            ->where('campaigns.status', '!=', 'completed')
-            ->whereNotNull('individuals.individual_follow_up_id');
+        $daysSinceLastAccident = 0;
+        if($lastAccidentDate) {
+            $daysSinceLastAccident = Carbon::parse($lastAccidentDate)->diffInDays(Carbon::now());
+        }
+
+        $recentAccidents = Accident::select('date_of_accident', 'injured_person', 'reporting_user', 'status', 'area_id')
+            ->with([
+                'area' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'injuredPerson' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'reportingUser' => function ($query) {
+                    $query->select('id', 'name');
+                }
+            ])
+            ->orderBy('date_of_accident', 'desc')
+            ->limit(5)
+            ->get();
+                
 
         if ($request->has('dates') && $request->dates != null && count($request->dates) > 0) {
             $dates = $request->dates;
             $startDate = $dates[0];
             $endDate = $dates[1];
 
-            $yourLeadCount = $yourLeadCount->whereRaw('DATE(individuals.updated_at) >= ?', [$startDate])
-                ->whereRaw('DATE(individuals.updated_at) <= ?', [$endDate]);
-            $totalTimes = $totalTimes->whereRaw('DATE(individuals.updated_at) >= ?', [$startDate])
-                ->whereRaw('DATE(individuals.updated_at) <= ?', [$endDate]);
-            $totalFollowUps = $totalFollowUps->whereRaw('DATE(individual_logs.date_time) >= ?', [$startDate])
-                ->whereRaw('DATE(individual_logs.date_time) <= ?', [$endDate]);
+            $totalAccidents = $totalAccidents->whereRaw('DATE(accidents.date_of_accident) >= ?', [$startDate])
+                ->whereRaw('DATE(accidents.date_of_accident) <= ?', [$endDate]);
+
+            $lostTimeInjuries = $lostTimeInjuries->whereRaw('DATE(accidents.date_of_accident) >= ?', [$startDate])
+                ->whereRaw('DATE(accidents.date_of_accident) <= ?', [$endDate]);
         }
 
-        $yourLeadCount = $yourLeadCount->count();
-        $totalTimes = $totalTimes->sum('time_taken');
-        $totalFollowUps = $totalFollowUps->count();
+        $accidentTrends = $this->accidentTrends();
 
 
         return ApiResponse::make('Data fetched', [
-            'actionedCampaigns' => $this->getActionedCampaigns(),
-            'callMade' => $this->getCallMade(),
-            'allAppointments' => $this->getBookedAppointments(),
-            'allFollowUps' => $this->getFollowUps(),
+            'accidents_by_area' => $this->accidentsByArea($startDate ?? null, $endDate ?? null),
+            'accident_trends' => $accidentTrends,
+            'recent_accidents' => $recentAccidents,
             'stateData' => [
-                'campaign_count' => $yourCampaignCount,
-                'lead_count' => $yourLeadCount,
-                'total_times' => $totalTimes,
-                'total_follow_ups' => $totalFollowUps,
+                'accident_count' => $totalAccidents->get()->count(),
+                'lost_time_injuries' => $lostTimeInjuries->get()->sum('days_absent'),
+                'current_injured_members_count' => $currentInjuredPersonCount,
+                'days_since_last_accident' => $daysSinceLastAccident,
             ]
         ]);
     }
 
-    public function getActionedCampaigns()
-    {
-        $request = request();
-        $user = user();
+    public function accidentTrends() {
+        $accidentsByMonth = Accident::selectRaw('MONTH(date_of_accident) as month, COUNT(*) as count')
+        ->whereRaw('DATE(date_of_accident) >= ?', [Carbon::now()->subYear()])
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get()
+        ->pluck('count', 'month');
 
-        $allActionedCampaigns = CampaignUser::select('campaigns.id', 'campaigns.name')
-            ->join('campaigns', 'campaigns.id', '=', 'campaign_users.campaign_id')
-            ->where('campaign_users.user_id', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            })
-            ->get();
-
-        $actionedCampaignName = [];
-        $actionedCampaignLeads = [];
-        $actionedCampaignColors = [];
-        foreach ($allActionedCampaigns as $allActionedCampaign) {
-            $totalLeads = Individual::where('individuals.last_action_by', '=', $user->id)
-                ->where('individuals.campaign_id', '=', $allActionedCampaign->id);
-
-            if ($request->has('dates') && $request->dates != null && count($request->dates) > 0) {
-                $dates = $request->dates;
-                $startDate = $dates[0];
-                $endDate = $dates[1];
-
-                $totalLeads = $totalLeads->whereRaw('DATE(individuals.updated_at) >= ?', [$startDate])
-                    ->whereRaw('DATE(individuals.updated_at) <= ?', [$endDate]);
-            }
-
-            $totalLeads = $totalLeads->count();
-
-            $actionedCampaignName[] = $allActionedCampaign->name;
-            $actionedCampaignLeads[] = $totalLeads;
-            $actionedCampaignColors[] = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+        $labels = [];
+        $values = [];
+        for($i = 1; $i <= 12; $i++) {
+            $labels[] = Carbon::create()->month($i)->format('F');
+            $values[] = $accidentsByMonth->get($i, 0);
         }
 
         return [
-            'labels' => $actionedCampaignName,
-            'values' => $actionedCampaignLeads,
-            'colors' => $actionedCampaignColors,
+            'labels' => $labels,
+            'values' => $values
         ];
     }
 
-    public function getCallMade()
-    {
-        $user = user();
-        $request = request();
-
-        if ($request->has('dates') && $request->dates != null && count($request->dates) > 0) {
-            $dates = $request->dates;
-            $startDate = $dates[0];
-            $endDate = $dates[1];
-        } else {
-            $startDate =  Carbon::now()->subDays(30)->format("Y-m-d");
-            $endDate =  Carbon::now()->format("Y-m-d");
-        }
-
-        $allLeads = Individual::select(DB::raw('date(individuals.updated_at) as date, count(individuals.id) as total_leads'))
-            ->join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->where('individuals.last_action_by', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            })
-            ->whereRaw('DATE(individuals.updated_at) >= ?', [$startDate])
-            ->whereRaw('DATE(individuals.updated_at) <= ?', [$endDate])
-            ->groupByRaw('date(individuals.updated_at)')
-            ->orderByRaw("date(individuals.updated_at) asc")
-            ->pluck('total_leads', 'date');
-
-        $periodDates = CarbonPeriod::create($startDate, $endDate);
-        $datesArray = [];
-        $leadsCount = [];
-
-        // Iterate over the period
-        foreach ($periodDates as $periodDate) {
-            $currentDate =  $periodDate->format('Y-m-d');
-
-            if (isset($allLeads[$currentDate])) {
-                $datesArray[] = $currentDate;
-                $leadsCount[] = isset($allLeads[$currentDate]) ? $allLeads[$currentDate] : 0;
+    public function accidentsByArea($startDate = null, $endDate = null) {
+        $areas = Area::withCount([
+            'accidents' => function ($query) use ($startDate, $endDate) {
+                if ($startDate && $endDate) {
+                    $query->whereRaw('DATE(date_of_accident) >= ?', [$startDate])
+                          ->whereRaw('DATE(date_of_accident) <= ?', [$endDate]);
+                }
             }
+        ])->get();
+
+        $name = [];
+        $accident_count = [];
+        $colors = [];
+        foreach ($areas as $area) {
+
+            $name[] = $area->name;
+            $accident_count[] = $area->accidents_count;
+            $colors[] = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
         }
 
         return [
-            'dates' => $datesArray,
-            'calls' => $leadsCount,
+            'labels' => $name,
+            'values' => $accident_count,
+            'colors' => $colors
         ];
-    }
-
-    public function getBookedAppointments()
-    {
-        $request = request();
-        $user = user();
-
-        $allAppointments = Individual::select('individuals.id', 'individuals.reference_number','individuals.first_name','individuals.SSN','individuals.date_of_birth', 'individuals.home_phone', 'individuals.phone_number', 'individuals.email', 'individuals.language', 'individuals.original_profile_id', 'individuals.lead_data', 'individuals.campaign_id', 'individuals.time_taken', 'individuals.first_action_by', 'individuals.last_action_by', 'individuals.salesman_booking_id')
-            ->with([
-                'campaign' => function ($query) {
-                    $query->select('id', 'name', 'status');
-                },
-                'firstActioner' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'lastActioner' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'salesmanBooking' => function ($query) {
-                    $query->select('id', 'individual_id', 'user_id', 'date_time');
-                },
-                'salesmanBooking.user' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'lead' => function ($query) {
-                    $query;
-                }
-            ])
-            ->join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->join('individual_logs', 'individual_logs.id', '=', 'individuals.salesman_booking_id')
-            ->where('individuals.last_action_by', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            })
-            ->whereNotNull('salesman_booking_id');
-
-        if ($request->has('dates') && $request->dates != null && count($request->dates) > 0) {
-            $dates = $request->dates;
-            $startDate = $dates[0];
-            $endDate = $dates[1];
-
-            $allAppointments = $allAppointments->whereRaw('DATE(individual_logs.date_time) >= ?', [$startDate])
-                ->whereRaw('DATE(individual_logs.date_time) <= ?', [$endDate]);
-        }
-
-        $allAppointments = $allAppointments->take(5)->get();
-
-
-        return $allAppointments;
-    }
-
-    public function getFollowUps()
-    {
-        $request = request();
-        $user = user();
-
-        $allAppointments = Individual::select('individuals.id', 'individuals.reference_number','individuals.first_name','individuals.SSN','individuals.date_of_birth', 'individuals.home_phone', 'individuals.phone_number', 'individuals.email', 'individuals.language', 'individuals.original_profile_id', 'individuals.last_name', 'individuals.lead_data', 'individuals.campaign_id', 'individuals.time_taken', 'individuals.first_action_by', 'individuals.last_action_by', 'individuals.individual_follow_up_id')
-            ->with([
-                'campaign' => function ($query) {
-                    $query->select('id', 'name', 'status');
-                },
-                'firstActioner' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'lastActioner' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'individualFollowUp' => function ($query) {
-                    $query->select('id', 'individual_id', 'user_id', 'date_time');
-                },
-                'individualFollowUp.user' => function ($query) {
-                    $query->select('id', 'name');
-                },
-                'lead' => function ($query) {
-                    $query;
-                }
-            ])
-            ->join('campaigns', 'campaigns.id', '=', 'individuals.campaign_id')
-            ->join('individual_logs', 'individual_logs.id', '=', 'individuals.individual_follow_up_id')
-            ->where('individuals.last_action_by', '=', $user->id)
-            ->where(function ($query) {
-                return $query->where('campaigns.status', 'started')
-                    ->orWhereNull('campaigns.status');
-            })
-            ->whereNotNull('individual_follow_up_id');
-
-        if ($request->has('dates') && $request->dates != null && count($request->dates) > 0) {
-            $dates = $request->dates;
-            $startDate = $dates[0];
-            $endDate = $dates[1];
-
-            $allAppointments = $allAppointments->whereRaw('DATE(individual_logs.date_time) >= ?', [$startDate])
-                ->whereRaw('DATE(individual_logs.date_time) <= ?', [$endDate]);
-        }
-
-        $allAppointments = $allAppointments->take(5)->get();
-
-
-        return $allAppointments;
     }
 
     public function changeThemeMode(Request $request)
