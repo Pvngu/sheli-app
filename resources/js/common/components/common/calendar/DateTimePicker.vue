@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 import common from "../../../composable/common";
 
 export default defineComponent({
@@ -59,6 +59,11 @@ export default defineComponent({
             emit("dateTimeChanged", emitValue);
         };
 
+        watch(() => props.dateTime, (newValue) => {
+            if (newValue) {
+                dateTimeValue.value = dayjs(newValue);
+            }
+        });
         return {
             dateTimeValue,
             disabledDate,
