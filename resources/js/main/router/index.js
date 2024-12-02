@@ -9,6 +9,10 @@ import AccidentRoutes from './accidents';
 import AreaRoutes from './areas';
 import SettingRoutes from './settings';
 import SetupAppRoutes from './setupApp';
+import AuditRoutes from './audits';
+import DocumentRoutes from './documents';
+import CourseRoutes from './courses';
+import EnrollmentRoutes from './enrollments';
 import { checkUserPermission } from '../../common/scripts/functions';
 
 const allActiveModules = window.config.modules;
@@ -30,6 +34,10 @@ const router = createRouter({
         ...SettingRoutes,
         ...AccidentRoutes,
         ...AreaRoutes,
+        ...AuditRoutes,
+        ...DocumentRoutes,
+        ...CourseRoutes,
+        ...EnrollmentRoutes,
     ],
     scrollBehavior: () => ({ left: 0, top: 0 }),
 });

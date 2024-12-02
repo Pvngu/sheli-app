@@ -61,7 +61,21 @@ ApiRoute::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         ApiRoute::post('app-notifications/{id}/mark-as-read', ['as' => 'api.app-notifications.mark-as-read', 'uses' => 'AppNotificationUserController@markAsRead']);
         ApiRoute::post('app-notifications/mark-all-as-read', ['as' => 'api.app-notifications.mark-all-as-read', 'uses' => 'AppNotificationUserController@markAllAsRead']);
 
+        ApiRoute::get('accidents/export', ['as' => 'api.accidents.export', 'uses' => 'AccidentController@export']);
         ApiRoute::resource('accidents', 'AccidentController', $options);
+
         ApiRoute::resource('areas', 'AreaController', $options);
+        
+        // Add courses routes
+        ApiRoute::get('courses/export', ['as' => 'api.courses.export', 'uses' => 'CourseController@export']);
+        ApiRoute::resource('courses', 'CourseController', $options);
+
+        ApiRoute::resource('audits', 'AuditController', $options);
+
+        ApiRoute::resource('documents', 'DocumentController', $options);
+
+        ApiRoute::delete('deleteFile/{fileName}', ['as' => 'api.document.deleteFile', 'uses' => 'DocumentController@deleteFile']);
+        
+        ApiRoute::resource('enrollments', 'EnrollmentController', $options);
     });
 });
