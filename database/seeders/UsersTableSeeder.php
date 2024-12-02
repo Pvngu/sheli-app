@@ -80,7 +80,6 @@ class UsersTableSeeder extends Seeder
             $adminRole->id,
             $managerRole->id,
             $memberRole->id,
-
         ];
 
         // StaffMembers
@@ -96,10 +95,5 @@ class UsersTableSeeder extends Seeder
             // Assign Role
             $user->attachRole($roleId);
         });
-
-        // Salesmans
-        Salesman::factory()->count(33)->create([
-            'company_id' => $company->id
-        ]);
     }
 }

@@ -13,7 +13,7 @@ class AreasTableSeeder extends Seeder
     public function run(): void
     {
         Area::factory()
-            ->count(10)
+            ->count(6)
             ->create();
     }
 }

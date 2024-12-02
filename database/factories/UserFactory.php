@@ -24,6 +24,7 @@ class UserFactory extends Factory
         return [
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
             'password' =>  '12345678',
             'user_type' => 'staff_members',
             'status' => $this->faker->randomElement(['enabled', 'disabled'])
