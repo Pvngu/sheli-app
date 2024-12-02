@@ -98,6 +98,12 @@ export default defineComponent({
             }
         })
 
+        watch(() => props.value, (newValue) => {
+            if(newValue) {
+                selectOption.value = newValue;
+            }
+        })
+
         return {
             allUsers,
             onChange,
