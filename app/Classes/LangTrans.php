@@ -134,6 +134,7 @@ class LangTrans
             'spanish' => 'Spanish',
             'export_as' => 'Export As',
             'finished' => 'Finished',
+            'in_progress' => 'In Progress',
         ],
         'menu' => [
             'dashboard' => 'Dashboard',

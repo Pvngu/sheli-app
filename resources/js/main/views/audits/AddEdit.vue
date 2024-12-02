@@ -26,7 +26,14 @@
                     <a-form-item label="Auditor" name="auditor_id"
                         :help="rules.auditor_id ? rules.auditor_id.message : null"
                         :validateStatus="rules.auditor_id ? 'error' : null" class="required">
-                        <a-input v-model:value="formData.auditor_id" placeholder="Enter Auditor ID" />
+                        <UserSelect
+                            @onChange="(id) => {
+                            formData.auditor_id = id;
+                            }"
+                            :value="formData.auditor_id"
+                            :data="auditors"
+                            :fetchUserData="false"
+                        />
                     </a-form-item>
                 </a-col>
                 <a-col :xs="24" :sm="24" :md="12" :lg="12">
@@ -35,6 +42,19 @@
                         <a-select v-model:value="formData.status" placeholder="Select Status">
                             <a-select-option value="pending">Pending</a-select-option>
                             <a-select-option value="completed">Completed</a-select-option>
+                        </a-select>
+                    </a-form-item>
+                </a-col>
+            </a-row>
+            <a-row :gutter="16">
+                <a-col :xs="24" :sm="24" :md="12" :lg="12">
+                    <a-form-item label="Area" name="area_id"
+                        :help="rules.area_id ? rules.area_id.message : null"
+                        :validateStatus="rules.area_id ? 'error' : null" class="required">
+                        <a-select v-model:value="formData.area_id" placeholder="Select Area">
+                            <a-select-option v-for="area in areas" :key="area.xid" :value="area.xid">
+                                {{ area.name }}
+                            </a-select-option>
                         </a-select>
                     </a-form-item>
                 </a-col>
@@ -96,6 +116,7 @@ import common from "../../../common/composable/common";
 import apiAdmin from "../../../common/composable/apiAdmin";
 import Upload from "../../../common/core/ui/file/Upload.vue";
 import DateTimePicker from "../../../common/components/common/calendar/DateTimePicker.vue";
+import UserSelect from "../../../common/components/common/select/UserSelect.vue";
 
 export default defineComponent({
     props: [
@@ -106,12 +127,15 @@ export default defineComponent({
         "addEditType",
         "pageTitle",
         "successMessage",
+        "auditors",
+        "areas"
     ],
     components: {
         PlusOutlined,
         LoadingOutlined,
         SaveOutlined,
         DateTimePicker,
+        UserSelect,
     },
     setup(props, { emit }) {
         const { appSetting } = common();

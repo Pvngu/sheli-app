@@ -70,6 +70,7 @@ ApiRoute::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         ApiRoute::get('courses/export', ['as' => 'api.courses.export', 'uses' => 'CourseController@export']);
         ApiRoute::resource('courses', 'CourseController', $options);
 
+        ApiRoute::get('audits/generated-pdf/{auditXId}', ['as' => 'api.audits.generated-pdf', 'uses' => 'AuditController@downloadAudit']);
         ApiRoute::resource('audits', 'AuditController', $options);
 
         ApiRoute::resource('documents', 'DocumentController', $options);

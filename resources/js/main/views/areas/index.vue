@@ -85,6 +85,11 @@
                         size="middle"
                     >
                         <template #bodyCell="{ column, record }">
+                            <template v-if="column.dataIndex === 'description'">
+                                <p style="text-align: justify; white-space: wrap;" >
+                                    {{ record.description }}
+                                </p>
+                            </template>
                             <template v-if="column.dataIndex === 'action'">
                                 <a-button
                                     v-if="

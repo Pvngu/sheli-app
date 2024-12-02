@@ -17,12 +17,14 @@ return new class extends Migration
             $table->string('audit_name');
             $table->date('audit_date');
             $table->bigInteger('auditor_id')->unsigned();
+            $table->bigInteger('area_id')->unsigned();
             $table->text('findings');
             $table->text('corrective_actions');
             $table->string('status');
             $table->timestamps();
 
             $table->foreign('auditor_id')->references('id')->on('users');
+            $table->foreign('area_id')->references('id')->on('areas');
         });
     }
 

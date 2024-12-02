@@ -15,6 +15,7 @@ class AuditFactory extends Factory
             'audit_name' => $this->faker->sentence,
             'audit_date' => $this->faker->date,
             'auditor_id' => \App\Models\User::factory(),
+            'area_id' => $this->faker->numberBetween(1, 6),
             'findings' => $this->faker->paragraph,
             'corrective_actions' => $this->faker->paragraph,
             'status' => $this->faker->randomElement(['pending', 'completed', 'in-progress']),

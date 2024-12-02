@@ -14,10 +14,11 @@ class UpdateRequest extends BaseRequest
     public function rules()
     {
         return [
-            'audit_name' => 'sometimes|required|string',
-            'audit_date' => 'sometimes|required|date',
-            'auditor_id' => 'sometimes|required|integer',
-            'status' => 'sometimes|required|string|in:pending,completed',
+            'audit_name' => 'required|string',
+            'audit_date' => 'required|date',
+            'auditor_id' => 'required',
+            'area_id' => 'required',
+            'status' => 'required',
         ];
     }
 }

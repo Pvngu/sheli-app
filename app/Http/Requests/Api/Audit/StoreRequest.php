@@ -15,8 +15,9 @@ class StoreRequest extends BaseRequest
         return [
             'audit_name' => 'required|string',
             'audit_date' => 'required|date',
-            'auditor_id' => 'required|integer',
-            'status' => 'required|string|in:pending,completed',
+            'auditor_id' => 'required',
+            'area_id' => 'required',
+            'status' => 'required',
         ];
     }
 }
