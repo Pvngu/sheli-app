@@ -82,6 +82,34 @@ class EntrustSetupTables extends Migration
                 'user_id' => $admin->id,
                 'role_id' => $adminRoleId,
             ]);
+
+            DB::table('roles')->insert([
+                'company_id' => $company->id,
+                'name' => 'supervisor',
+                'display_name' => 'Supervisor',
+                'description' => 'Supervisor is responsible for overseeing the work and ensuring compliance with safety standards in all areas, including accidents, audits, documents, trainings, and courses.'
+            ]);
+
+            DB::table('roles')->insert([
+                'company_id' => $company->id,
+                'name' => 'worker',
+                'display_name' => 'Worker',
+                'description' => 'Worker is responsible for performing tasks and following safety protocols in all areas, including accidents, audits, documents, trainings, and courses.'
+            ]);
+
+            DB::table('roles')->insert([
+                'company_id' => $company->id,
+                'name' => 'auditor',
+                'display_name' => 'Auditor',
+                'description' => 'Auditor is responsible for conducting audits and ensuring compliance with safety standards in all areas, including accidents, audits, documents, trainings, and courses.'
+            ]);
+
+            DB::table('roles')->insert([
+                'company_id' => $company->id,
+                'name' => 'trainer',
+                'display_name' => 'Trainer',
+                'description' => 'Trainer is responsible for conducting trainings and courses to ensure that all employees are knowledgeable about safety protocols and procedures in all areas, including accidents, audits, documents, trainings, and courses.'
+            ]);
         }
 
         // Seeding Permissions
