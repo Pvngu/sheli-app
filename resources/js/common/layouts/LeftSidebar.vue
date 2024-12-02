@@ -101,7 +101,7 @@
                         <span>{{ $t("menu.activity_log") }}</span>
                     </a-menu-item> -->
 
-                    <a-menu-item
+                    <!-- <a-menu-item
                         v-if="
                             permsArray.includes('team_chat_view') ||
                             permsArray.includes('admin')
@@ -117,7 +117,101 @@
                         <a-badge dot :class="{ iconNotificationCollapsed : menuCollapsed, iconNotification : !menuCollapsed }" />
                         <CommentOutlined />
                         <span>{{ $t("menu.chat") }}</span>
+                    </a-menu-item> -->
+
+                    <a-menu-item
+                        v-if="permsArray.includes('accidents_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.accidents.index' });
+                            }
+                        "
+                        key="accidents"
+                    >
+                        <AlertOutlined />
+                        <span>{{ $t("menu.accidents") }}</span>
                     </a-menu-item>
+
+                    <a-menu-item
+                        v-if="permsArray.includes('areas_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.areas.index' });
+                            }
+                        "
+                        key="areas"
+                    >
+                        <ApartmentOutlined />
+                        <span>{{ $t("menu.areas") }}</span>
+                    </a-menu-item>
+
+                    <a-menu-item
+                        v-if="permsArray.includes('audits_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.audits.index' });
+                            }
+                        "
+                        key="audits"
+                    >
+                        <FileProtectOutlined />
+                        <span>{{ $t("menu.audits") }}</span>
+                    </a-menu-item>
+
+                    <a-menu-item
+                        v-if="permsArray.includes('documents_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.documents.index' });
+                            }
+                        "
+                        key="documents"
+                    >    
+                        <FileTextOutlined />
+                        <span>{{ $t("menu.documents") }}</span>
+                    </a-menu-item>
+
+                    <LeftSideBarMainHeading
+                        :title="$t('menu.training_management')"
+                        :visible="menuCollapsed"
+                    />
+
+                    <a-menu-item
+                        v-if="permsArray.includes('enrollments_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.enrollments.index' });
+                            }
+                        "
+                        key="enrollments"
+                    >
+                        <BookOutlined />
+                        <span>{{ $t("menu.trainings") }}</span>
+                    </a-menu-item>
+
+                    <a-menu-item
+                        v-if="permsArray.includes('courses_view') || permsArray.includes('admin')"
+                        @click="
+                            () => {
+                                menuSelected();
+                                $router.push({ name: 'admin.courses.index' });
+                            }
+                        "
+                        key="courses"
+                    >  
+                        <ReadOutlined />
+                        <span>{{ $t("menu.courses") }}</span>
+                    </a-menu-item>
+
+                    <LeftSideBarMainHeading
+                        :title="$t('menu.user_management')"
+                        :visible="menuCollapsed"
+                    />
 
                     <a-menu-item
                         v-if="
@@ -136,34 +230,6 @@
                         <span>{{ $t("menu.staff_members") }}</span>
                     </a-menu-item>
 
-
-                    <a-menu-item
-                        v-if="permsArray.includes('accidents_view') || permsArray.includes('admin')"
-                        @click="
-                            () => {
-                                menuSelected();
-                                $router.push({ name: 'admin.accidents.index' });
-                            }
-                        "
-                        key="accidents"
-                    >
-                        <CarOutlined />
-                        <span>{{ $t("menu.accidents") }}</span>
-                    </a-menu-item>
-
-                    <a-menu-item
-                        v-if="permsArray.includes('areas_view') || permsArray.includes('admin')"
-                        @click="
-                            () => {
-                                menuSelected();
-                                $router.push({ name: 'admin.areas.index' });
-                            }
-                        "
-                        key="areas"
-                    >
-                        <ApartmentOutlined />
-                        <span>{{ $t("menu.areas") }}</span>
-                    </a-menu-item>
                     <LeftSideBarMainHeading
                         :title="$t('menu.settings')"
                         :visible="menuCollapsed"
@@ -222,7 +288,7 @@ import {
     BankOutlined,
     RocketOutlined,
     LaptopOutlined,
-    CarOutlined,
+    AlertOutlined,
     DollarCircleOutlined,
     CopyrightCircleOutlined,
     IeOutlined,
@@ -242,7 +308,9 @@ import {
     FileDoneOutlined,
     CheckCircleOutlined,
     ReconciliationOutlined,
-    CommentOutlined
+    CommentOutlined,
+    BookOutlined,
+    ReadOutlined,
 } from "@ant-design/icons-vue";
 import { PerfectScrollbar } from "vue3-perfect-scrollbar";
 import common from "../../common/composable/common";
@@ -271,7 +339,7 @@ export default defineComponent({
         BankOutlined,
         RocketOutlined,
         LaptopOutlined,
-        CarOutlined,
+        AlertOutlined,
         DollarCircleOutlined,
         CopyrightCircleOutlined,
         IeOutlined,
@@ -291,7 +359,9 @@ export default defineComponent({
         FileDoneOutlined,
         CheckCircleOutlined,
         ReconciliationOutlined,
-        CommentOutlined
+        CommentOutlined,
+        BookOutlined,
+        ReadOutlined,
     },
     setup(props, { emit }) {
         const {
