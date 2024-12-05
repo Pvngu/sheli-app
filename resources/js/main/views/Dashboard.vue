@@ -159,31 +159,6 @@
                                     }}
                                 </a-tag>
                             </template>
-                            <!-- <template v-if="column.dataIndex === 'action'">
-                                <a-button
-                                    v-if="
-                                        permsArray.includes('accidents_edit') ||
-                                        permsArray.includes('admin')
-                                    "
-                                    type="primary"
-                                    @click="editItem(record)"
-                                    style="margin-left: 4px"
-                                >
-                                    <template #icon><EditOutlined /></template>
-                                </a-button>
-                                <a-button
-                                    v-if="
-                                        (permsArray.includes('accidents_delete') ||
-                                            permsArray.includes('admin')) &&
-                                        (!record.children || record.children.length == 0)
-                                    "
-                                    type="primary"
-                                    @click="showDeleteConfirm(record.xid)"
-                                    style="margin-left: 4px"
-                                >
-                                    <template #icon><DeleteOutlined /></template>
-                                </a-button>
-                            </template> -->
                         </template>
                     </a-table>
                     <template #extra>
@@ -274,10 +249,10 @@ export default {
                 title: t('accident.status'),
                 dataIndex: 'status',
             },
-            {
-                title: t('accident.action'),
-                dataIndex: 'action',
-            },
+            // {
+            //     title: t('accident.action'),
+            //     dataIndex: 'action',
+            // },
         ];
 
         onMounted(() => {

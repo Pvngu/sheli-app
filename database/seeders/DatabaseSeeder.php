@@ -14,9 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         if (env('APP_ENV') == 'testing') {
+            $this->call(UsersTableSeeder::class);
             $this->call(AreasTableSeeder::class);
             $this->call(AccidentsTableSeeder::class);
             $this->call(AuditsTableSeeder::class);
+            $this->call(CoursesTableSeeder::class);
+            $this->call(EnrollmentsTableSeeder::class);
         }
     }
 }

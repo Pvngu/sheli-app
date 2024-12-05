@@ -147,7 +147,7 @@
                                     </a-button>
                                     <a-button
                                         type="primary"
-                                        @click="deleteItem(record)"
+                                        @click="showDeleteConfirm(record.xid)"
                                         danger
                                         v-if="permsArray.includes('admin')"
                                     >

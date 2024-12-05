@@ -23,77 +23,50 @@ class UsersTableSeeder extends Seeder
     {
         Model::unguard();
 
-        DB::table('users')->delete();
-        DB::table('role_user')->delete();
-
-        DB::statement('ALTER TABLE users AUTO_INCREMENT = 1');
-        DB::statement('ALTER TABLE role_user AUTO_INCREMENT = 1');
-
-        $count = env('SEED_RECORD_COUNT', 30);
-        $faker = \Faker\Factory::create();
-
         $company = Company::where('is_global', 0)->first();
 
-        // Admin User
-        $adminRole = Role::withoutGlobalScope(CompanyScope::class)
-            ->where('name', 'admin')->first();
-        $admin = new User();
-        $admin->company_id = $company->id;
-        $admin->name = 'Admin';
-        $admin->email = 'admin@example.com';
-        $admin->password = '12345678';
-        $admin->role_id = $adminRole->id;
-        $admin->user_type = "staff_members";
-        $admin->save();
-        $admin->attachRole($adminRole->id);
+        // Worker
+        $workerRole = Role::withoutGlobalScope(CompanyScope::class)
+        ->where('name', 'worker')->first();
+        User::factory()->count(100)->create([
+        'company_id' => $company->id,
+        'role_id' => $workerRole->id,
+        'user_type' => 'staff_members'
+        ])->each(function ($user) use ($workerRole) {
+        $user->attachRole($workerRole->id);
+        });
 
-        $company->admin_id = $admin->id;
-        $company->save();
+        // Auditor
+        $auditorRole = Role::withoutGlobalScope(CompanyScope::class)
+        ->where('name', 'auditor')->first();
+        User::factory()->count(10)->create([
+        'company_id' => $company->id,
+        'role_id' => $auditorRole->id,
+        'user_type' => 'staff_members'
+        ])->each(function ($user) use ($auditorRole) {
+        $user->attachRole($auditorRole->id);
+        });
 
-        // Manager
-        $managerRole = Role::withoutGlobalScope(CompanyScope::class)
-            ->where('name', 'manager')->first();
-        $manager = new User();
-        $manager->company_id = $company->id;
-        $manager->name = 'Manager';
-        $manager->email = 'manager@example.com';
-        $manager->password = '12345678';
-        $manager->role_id = $managerRole->id;
-        $manager->user_type = "staff_members";
-        $manager->save();
-        $manager->attachRole($managerRole->id);
+        // Trainer
+        $trainerRole = Role::withoutGlobalScope(CompanyScope::class)
+        ->where('name', 'trainer')->first();
+        User::factory()->count(2)->create([
+        'company_id' => $company->id,
+        'role_id' => $trainerRole->id,
+        'user_type' => 'staff_members'
+        ])->each(function ($user) use ($trainerRole) {
+        $user->attachRole($trainerRole->id);
+        });
 
-        // Member
-        $memberRole = Role::withoutGlobalScope(CompanyScope::class)
-            ->where('name', 'member')->first();
-        $member = new User();
-        $member->company_id = $company->id;
-        $member->name = 'Member';
-        $member->email = 'member@example.com';
-        $member->password = '12345678';
-        $member->role_id = $memberRole->id;
-        $member->user_type = "staff_members";
-        $member->save();
-        $member->attachRole($memberRole->id);
-
-        $allRoles = [
-            $adminRole->id,
-            $managerRole->id,
-            $memberRole->id,
-        ];
-
-        // StaffMembers
-        User::factory()->count((int)$count)->create([
-            'company_id' => $company->id
-        ])->each(function ($user) use ($faker, $allRoles) {
-
-            $roleId = $faker->randomElement($allRoles);
-
-            $user->role_id = $roleId;
-            $user->save();
-
-            // Assign Role
-            $user->attachRole($roleId);
+        // Supervisor
+        $supervisorRole = Role::withoutGlobalScope(CompanyScope::class)
+        ->where('name', 'supervisor')->first();
+        User::factory()->count(2)->create([
+        'company_id' => $company->id,
+        'role_id' => $supervisorRole->id,
+        'user_type' => 'staff_members'
+        ])->each(function ($user) use ($supervisorRole) {
+        $user->attachRole($supervisorRole->id);
         });
     }
 }

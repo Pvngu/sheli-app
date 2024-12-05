@@ -30,6 +30,11 @@ class CreateLangsTable extends Migration
         $enLang->name = 'English';
         $enLang->key = 'en';
         $enLang->save();
+
+        $enLang = new Lang();
+        $enLang->name = 'Spanish';
+        $enLang->key = 'es';
+        $enLang->save();
     }
 
     /**

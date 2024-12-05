@@ -578,6 +578,7 @@ class LangTrans
             'status' => 'Status',
             'findings' => 'Findings',
             'corrective_actions' => 'Corrective Actions',
+            'delete_message' => 'Are you sure you want to delete this audit?',
         ],
         'document' => [
             'add' => 'Add New Document',

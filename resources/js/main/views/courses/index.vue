@@ -114,6 +114,11 @@
                             <template v-if="column.dataIndex === 'trainer'">
                                 {{ record.trainer.name }}
                             </template>
+                            <template v-if="column.dataIndex === 'description'">
+                                <p style="text-align: justify; white-space: wrap;" >
+                                    {{ record.description }}
+                                </p>
+                            </template>
                             <template
                                 v-if="
                                     column.dataIndex === 'start_date' ||

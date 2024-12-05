@@ -47,7 +47,7 @@
                     </a-button>
                 </a-space>
             </a-col>
-            <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="10">
+            <!-- <a-col :xs="24" :sm="24" :md="12" :lg="10" :xl="10">
                 <a-select
                     v-model="filters.status"
                     @change="setUrlData"
@@ -57,7 +57,7 @@
                     <a-select-option value="completed">{{ $t('common.completed') }}</a-select-option>
                     <a-select-option value="finished">{{ $t('common.finished') }}</a-select-option>
                 </a-select>
-            </a-col>
+            </a-col> -->
         </a-row>
     </admin-page-filters>
 
