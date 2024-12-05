@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\Hash;
+use App\Classes\Common;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -45,5 +46,10 @@ class Audit extends BaseModel
     public function area()
     {
         return $this->belongsTo(Area::class, 'area_id', 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(AuditImage::class, 'audit_id', 'id');
     }
 }

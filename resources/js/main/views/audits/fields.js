@@ -2,7 +2,7 @@ import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 
 const fields = () => {
-    const url = "audits?fields=id,xid,audit_name,audit_date,auditor_id,area_id,x_auditor_id,x_area_id,status,findings,corrective_actions,auditor{id,xid,name},area{id,xid,name}";
+    const url = "audits?fields=id,xid,audit_name,audit_date,auditor_id,area_id,x_auditor_id,x_area_id,status,findings,corrective_actions,auditor{id,xid,name},area{id,xid,name}images{xid,file,url}";
     const addEditUrl = "audits";
     const { t } = useI18n();
     const auditors = ref([]);
@@ -15,7 +15,8 @@ const fields = () => {
         area_id: "",
         status: "",
         findings: "",
-        corrective_actions: ""
+        corrective_actions: "",
+        images: []
     };
 
     const getPrefetchData = () => {

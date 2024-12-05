@@ -78,5 +78,10 @@ ApiRoute::group(['namespace' => 'App\Http\Controllers\Api'], function () {
         ApiRoute::delete('deleteFile/{fileName}', ['as' => 'api.document.deleteFile', 'uses' => 'DocumentController@deleteFile']);
         
         ApiRoute::resource('enrollments', 'EnrollmentController', $options);
+
+        ApiRoute::post('audit-images/upload', ['as' => 'api.audit-images.upload', 'uses' => 'AuditImageController@upload']);
+        ApiRoute::resource('audit-images', 'AuditImageController', $options);
+
+
     });
 });

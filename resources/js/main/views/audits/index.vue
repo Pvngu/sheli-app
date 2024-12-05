@@ -200,6 +200,9 @@ export default {
                 crudVariables.hashableColumns.value = hashableColumns;
 
                 setUrlData();
+
+                crudVariables.initData.value = { ...initData };
+                crudVariables.formData.value = { ...initData };
             });
         });
         
@@ -212,9 +215,6 @@ export default {
             crudVariables.fetch({
                 page: 1,
             });
-
-            crudVariables.initData.value = { ...initData };
-            crudVariables.formData.value = { ...initData };
         }
 
         const downloadPdf = (record) => {

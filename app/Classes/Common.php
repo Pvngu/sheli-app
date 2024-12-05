@@ -39,6 +39,7 @@ class Common
             'websiteImagePath' => 'website',
             'offlineRequestDocumentPath' => 'offline-requests',
             'docFilesPath' => 'documents',
+            'auditFilesPath' => 'audits',
             'recordingAudioPath' => 'calls',
         ];
 
@@ -68,6 +69,8 @@ class Common
             $folderString = "docFilesPath";
         } else if ($folder == "calls") {
             $folderString = "recordingAudioPath";
+        } else if ($folder == "audits") {
+            $folderString = "auditFilesPath";
         }
 
         $folderPath = self::getFolderPath($folderString);

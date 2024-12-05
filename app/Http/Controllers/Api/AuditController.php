@@ -40,7 +40,17 @@ class AuditController extends ApiBaseController
                 'status' => $audit->status,
                 'current_year' => date('Y'),
                 'company_name' => $company->name,
+                'images' => []
             ];
+
+            if($audit->images) {
+                $images = [];
+                foreach($audit->images as $image) {
+                    $images[] = $image->file;
+                }
+
+                $data['images'] = $images;
+            }
 
             $pdf = Pdf::loadView('pdf_templates.audit', $data)
                 ->setPaper('letter', 'portrait');
@@ -53,5 +63,24 @@ class AuditController extends ApiBaseController
         }
 
         return response()->json(['error' => 'Audit not found'], 404);
+    }
+
+    public function updated(Audit $audit)
+    {
+        $request = request();
+        error_log('updated');
+
+        if($request->has('images')) {
+            $images = [];
+            $images = $request->images;
+
+            foreach($images as $image) {
+                $audit->images()->create([
+                    'file' => $image
+                ]);
+            }
+        }
+
+        return $audit;
     }
 }

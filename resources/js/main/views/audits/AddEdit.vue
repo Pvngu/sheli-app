@@ -79,18 +79,21 @@
             </a-row>
             <a-row :gitter="[16, 16]">
                 <a-col :xs="24" :sm="24" :md="24" :lg="24">
-                    <div class="clearfix">
-                        <a-upload v-model:file-list="fileList"
-                            list-type="picture-card" @preview="handlePreview">
-                            <div v-if="fileList.length < 8">
-                                <plus-outlined />
-                                <div style="margin-top: 8px">Upload</div>
-                            </div>
-                        </a-upload>
-                        <a-modal :open="previewVisible" :title="previewTitle" :footer="null" @cancel="handleCancel">
-                            <img alt="example" style="width: 100%" :src="previewImage" />
-                        </a-modal>
-                    </div>
+                    <UploadManyFiles
+                        :formData="formData"
+                        :fileL="formData.images"
+                        folder="audits"
+                        imageField="audits"
+                        @onFileUploaded="
+                            (file) => {
+                                formData.images.push(file);
+                            }
+                        "
+                        @onFileRemoved="
+                            (file) => {
+                                formData.images = formData.images.filter((image) => image.xid !== file.xid);
+                            }"
+                    />
                 </a-col>
             </a-row>
         </a-form>
@@ -114,7 +117,7 @@ import { defineComponent, ref } from "vue";
 import { PlusOutlined, LoadingOutlined, SaveOutlined } from "@ant-design/icons-vue";
 import common from "../../../common/composable/common";
 import apiAdmin from "../../../common/composable/apiAdmin";
-import Upload from "../../../common/core/ui/file/Upload.vue";
+import UploadManyFiles from "../../../common/core/ui/file/UploadManyFiles.vue";
 import DateTimePicker from "../../../common/components/common/calendar/DateTimePicker.vue";
 import UserSelect from "../../../common/components/common/select/UserSelect.vue";
 
@@ -136,6 +139,7 @@ export default defineComponent({
         SaveOutlined,
         DateTimePicker,
         UserSelect,
+        UploadManyFiles,
     },
     setup(props, { emit }) {
         const { appSetting } = common();
@@ -155,12 +159,27 @@ export default defineComponent({
         }
 
         const onSubmit = () => {
+            const newFormData = {
+                audit_name: props.formData['audit_name'],
+                audit_date: props.formData['audit_date'],
+                auditor_id: props.formData['auditor_id'],
+                status: props.formData['status'],
+                area_id: props.formData['area_id'],
+                findings: props.formData['findings'],
+                corrective_actions: props.formData['corrective_actions'],
+                _method: props.formData['_method']
+            }
             addEditRequestAdmin({
                 url: props.url,
-                data: props.formData,
+                data: newFormData,
                 successMessage: props.successMessage,
                 success: (res) => {
                     emit("addEditSuccess", res.xid);
+
+                    axiosAdmin.post('audit-images/upload', {
+                        images: props.formData.images.map((image) => image.file),
+                        audit_id: res.xid
+                    });
                 },
             });
         };
@@ -196,6 +215,7 @@ export default defineComponent({
             previewTitle,
             handleCancel,
             handlePreview,
+            fileList,
 
             drawerWidth: window.innerWidth <= 991 ? "90%" : "45%",
         };

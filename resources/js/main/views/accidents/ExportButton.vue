@@ -169,10 +169,6 @@ export default defineComponent({
             label: t('accident.status'),
             value: 'status',
             },
-            {
-            label: t('accident.action'),
-            value: 'action',
-            },
         ]);
 
         return {

@@ -95,11 +95,14 @@
             <p>{{ $corrective_actions }}</p>
 
             <!-- Images Section -->
-            {{-- <h2 class="section-title">Images</h2>
-            <div class="images">
-                <img src="{{ $image_url_1 }}" alt="Audit Image 1">
-                <img src="{{ $image_url_2 }}" alt="Audit Image 2">
-            </div> --}}
+            @if(count($images) > 0)
+                <h2 class="section-title">Images</h2>
+                <div class="images" style="text-align: center">
+                    @foreach($images as $image)
+                        <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path("/uploads/audits/" . $image))) }}" alt="Audit Image" style="width: 75%; text-align: center; height: auto; margin-bottom: 20px;">
+                    @endforeach
+                </div>
+            @endif
         </div>
 
         <!-- Footer Section -->
