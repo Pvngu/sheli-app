@@ -21,6 +21,8 @@ use Examyou\RestAPI\Exceptions\ApiException;
 use App\Http\Requests\Api\Auth\ProfileRequest;
 use App\Http\Requests\Api\Auth\UploadFileRequest;
 use App\Http\Requests\Api\Auth\RefreshTokenRequest;
+use OpenAI\Laravel\Facades\OpenAI;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AuthController extends ApiBaseController
 {
@@ -467,5 +469,74 @@ class AuthController extends ApiBaseController
                 'HH:mm:ss' => '24 Hours hh:mm:ss',
             ]
         ]);
+    }
+
+    public function downloadReport() {
+        $request = request();
+        $startDate = "";
+        $endDate = "";
+
+        $query = Accident::query()->with('area', 'injuredPerson', 'reportingUser');
+
+        // Dates Filters
+        if ($request->has('dates') && $request->dates != "") {
+            $dates = explode(',', $request->dates);
+            $startDate = $dates[0];
+            $endDate = $dates[1];
+
+            $query = $query->whereRaw('accidents.date_of_accident >= ?', bindings: [$startDate])
+            ->whereRaw('accidents.date_of_accident <= ?', [$endDate]);
+        }
+
+        $accidents = $query->get();
+
+        $accidentDescriptions = $accidents->map(function ($accident) {
+            return $accident->description;
+        })->implode("\n");
+
+        $prompt = "You are a safety and management system designed to summarize accident reports. Please provide a detailed summary of the following accident descriptions and make sure to include incident, injury and recommendation for each accidents and generate a summary recomendations:\n" . $accidentDescriptions;
+
+        $response = OpenAi::chat()->create([
+            'model' => 'gpt-4o-mini',
+            'messages' => [
+                [
+                    'role' => 'system',
+                    'content' => $prompt
+                ]
+            ]
+        ]);
+
+        if (isset($response->choices[0]->message->content)) {
+            $accidentSummaries = $this->formatAccidentSummaries($response->choices[0]->message->content);
+        } else {
+            // Log the response for debugging
+            error_log('ChatGPT response error');
+            return response()->json(['error' => 'Failed to generate summary'], 500);
+        }
+
+        try {
+            $pdf = Pdf::loadView('exports.report', [
+                'accidentSummaries' => $accidentSummaries,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'accidents' => $accidents,
+                'current_year' => date('Y'),
+                'company_name' => Company::first()->name
+            ]);
+            return $pdf->download('accident_report.pdf');
+        } catch (\Exception $e) {
+            // Log the exception for debugging
+            error_log('PDF generation error' . $e->getMessage());
+            return response()->json(['error' => 'Failed to generate PDF'], 500);
+        }
+    }
+
+    private function formatAccidentSummaries($text) {
+        $text = nl2br($text);
+        $text = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $text);
+        $text = preg_replace('/#### (.*?)(?=\n|$)/', '<h4>$1</h4>', $text);
+        $text = preg_replace('/### (.*?)(?=\n|$)/', '<h3>$1</h3>', $text);
+        $text = preg_replace('/- (.*?)(?=\n|$)/', '<p>$1</p>', $text);
+        return $text;
     }
 }

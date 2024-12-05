@@ -178,6 +178,7 @@ class LangTrans
             'lost_time_injuries' => 'Lost Time Injuries',
             'days_since_last_accident' => 'Days Since Last Accident',
             'accidents_trend' => 'Accidents Trend',
+            'generate_report' => 'Generate Report',
         ],
         'user' => [
             'staff_members' => 'Staff Members',

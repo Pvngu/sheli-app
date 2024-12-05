@@ -6,7 +6,7 @@
     </AdminPageHeader>
 
     <div class="dashboard-page-content-container">
-        <a-row :gutter="[8, 8]" class="mt-30 mb-10">
+        <a-row :gutter="[8, 8]" class="mt-30 mb-10" justify="space-between">
             <a-col :xs="24" :sm="24" :md="12" :lg="6" :xl="6">
                 <DateRangePicker
                     ref="serachDateRangePicker"
@@ -14,6 +14,17 @@
                         (changedDateTime) => (filters.dates = changedDateTime)
                     "
                 />
+            </a-col>
+            <a-col>
+                <a-button
+                    type="primary"
+                    @click="
+                        generateReport()
+                    "
+                    :loading="loading"
+                >
+                    {{ $t("dashboard.generate_report") }}
+                </a-button>
             </a-col>
         </a-row>
 
@@ -266,17 +277,38 @@ export default {
                 responseData.value = dashboardResponse.data;
             });
         };
+        const loading = ref(false);
 
         watch([filters], (newVal, oldVal) => {
             getInitData();
         });
+
+        const generateReport = () => {
+            loading.value = true;
+            axiosAdmin.get("dashboard/download-report", {
+                params: {
+                    dates: filters.dates.join(','),
+                },
+                responseType: 'blob',
+            }).then((response) => {
+                const blob = new Blob([response], { type: 'application/pdf' });
+                const link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                const fileName = `report.pdf`;
+                link.download = fileName;
+                link.click();
+                loading.value = false;
+            });
+        }
 
         return {
             formatTimeDuration,
             filters,
             responseData,
             accidentsColumns,
+            generateReport,
             formatDateTime,
+            loading
         };
     },
 };

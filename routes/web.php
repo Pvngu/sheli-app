@@ -16,6 +16,7 @@ ApiRoute::group(['namespace' => 'App\Http\Controllers\Api'], function () {
     ApiRoute::post('visible-subscription-modules', ['as' => 'api.extra.visible-subscription-modules', 'uses' => 'AuthController@visibleSubscriptionModules']);
 
     ApiRoute::group(['middleware' => ['api.auth.check']], function () {
+        ApiRoute::get('dashboard/download-report', ['as' => 'api.extra.dashboard.download-report', 'uses' => 'AuthController@downloadReport']);
         ApiRoute::post('dashboard', ['as' => 'api.extra.dashboard', 'uses' => 'AuthController@dashboard']);
         ApiRoute::post('upload-file', ['as' => 'api.extra.upload-file', 'uses' => 'AuthController@uploadFile']);
         ApiRoute::post('profile', ['as' => 'api.extra.profile', 'uses' => 'AuthController@profile']);
